@@ -1,0 +1,46 @@
+# syntax=docker/dockerfile:1
+#
+# ===================================================
+# | STREAM CLASSIFICATION ANNOTATION DATA PROCESSOR |
+# ===================================================
+# 
+# This Dockerfile is used to build annotation data processor for Stream Classification.
+# 
+# Quick Command to Build Annotation Data Processor
+# ================================================
+# docker build -t stream_classification:processor -f Processor .
+#
+# Quick Command to Run Annotation Data Processor
+# ==============================================
+# docker run --rm -it \
+#     -v [ Required: Your Path to Video File ]:/Video.mp4 \
+#     -v [ Required: Your Path to Annotation File ]:/Annotation.csv \
+#     -v [ Required: Your Directory Path to Save Generated / Updated Processed Data ]:/Output \
+#     stream_classification:processor [ Your Arguments ]
+#
+# Main Build Script
+# =================
+#
+# Pull ubuntu Image from DockerHub
+FROM ubuntu@sha256:b5a61709a9a44284d88fb12e5c48db0409cfad5b69d4ff8224077c57302df9cf
+# Install Necessary Packages
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update
+RUN apt-get install -y libgl1-mesa-dev
+RUN apt-get install -y libglib2.0-0
+RUN apt-get install -y libgtk2.0-dev
+RUN apt-get install -y python3
+RUN apt-get install -y python3-pip
+RUN pip3 install numpy
+RUN pip3 install pandas
+RUN pip3 install tqdm
+RUN pip3 install opencv-python
+RUN pip3 install opencv-python
+# Copy Resources to Respective Directories
+RUN mkdir /Output
+WORKDIR /home
+# Copy Annotation Data Processor File for Execution
+COPY ./Trainer/processor.py ./processor.py
+# Set Permissions & Create Execution Entrypoint
+RUN chmod 777 ./processor.py
+ENTRYPOINT [ "./processor.py" ]

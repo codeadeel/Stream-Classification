@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  server:
+    build:
+      context: .
+      dockerfile: ./Build_Server
+    image: stream_classification:server
+    container_name: stream_server
+    ports:
+      - "1234:1234"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+  
+  live_client:
+    build:
+      context: .
+      dockerfile: ./Live_Client_Browser
+    image: stream_classification:live_browser
+    container_name: stream_live_browser
+    ports:
+      - "80:80"
+    command: -l https://www.youtube.com/watch?v=HrrpR7zjFpU -sk 30 -ip 192.168.0.127:1234

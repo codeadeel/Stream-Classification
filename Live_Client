@@ -1,0 +1,53 @@
+# syntax=docker/dockerfile:1
+#
+# =====================================================
+# | STREAM CLASSIFICATION LIVESTREAM INFERENCE CLIENT |
+# =====================================================
+# 
+# This Dockerfile is used to build livestream inference client for Stream Classification.
+# 
+# Quick Command to Build Livestream Inference Client
+# ==================================================
+# docker build -t stream_classification:live_client -f Live_Client .
+#
+# Quick Command to Run Livestream Inference Client
+# ================================================
+# docker run --rm -it \
+#     -v [ Optional: Your Directory Path to Save Output ]:/Output \
+#     stream_classification:live_client [ Your Arguments ]
+#
+# Main Build Script
+# =================
+#
+# Pull ubuntu Image from DockerHub
+FROM ubuntu@sha256:b5a61709a9a44284d88fb12e5c48db0409cfad5b69d4ff8224077c57302df9cf
+# Install Necessary Packages
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update
+RUN apt-get install -y libgl1-mesa-dev
+RUN apt-get install -y libglib2.0-0
+RUN apt-get install -y libgtk2.0-dev
+RUN apt-get install -y python3
+RUN apt-get install -y python3-pip
+RUN pip3 install pillow
+RUN pip3 install pytz
+RUN pip3 install grpcio
+RUN pip3 install grpcio-tools
+RUN pip3 install opencv-python
+RUN pip3 install opencv-contrib-python
+# Copy Resources to Respective Directories
+RUN mkdir /resources
+WORKDIR /resources
+COPY ./Resources/ffmpeg ./ffmpeg
+COPY ./Resources/youtube-dl ./youtube-dl
+RUN chmod 777 ./*
+RUN mkdir /Output
+WORKDIR /home
+# Copy Livestream Inference Client Files for Execution
+COPY ./Server/communication_pb2_grpc.py ./communication_pb2_grpc.py
+COPY ./Server/communication_pb2.py ./communication_pb2.py
+COPY ./Server/inference_client.py ./inference_client.py
+COPY ./Clients/live_client.py ./live_client.py
+# Set Permissions & Create Execution Entrypoint
+RUN chmod 777 ./live_client.py
+ENTRYPOINT [ "./live_client.py" ]

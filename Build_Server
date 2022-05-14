@@ -1,0 +1,49 @@
+# syntax=docker/dockerfile:1
+#
+# ==========================================
+# | STREAM CLASSIFICATION INFERENCE SERVER |
+# ==========================================
+#
+# This Dockerfile is used to build inference server for Stream Classification.
+#
+# Quick Command to Build Server
+# =============================
+# docker build -t stream_classification:server -f Build_Server .
+#
+# Quick Command to Run Inference Server
+# =====================================
+# docker run --rm -it --gpus all \
+#     -v [ Optional: Your Path to Model Weights File ]:/resources/convnext.model \
+#     -v [ Optional: Your Path to One Hot Encoded Labels File ]:/resources/OHE.labels \
+#     -p [ Your Port to Expose Server ]:1234 \
+#     stream_classification:server [ Your Arguments ]
+#
+# Main Build Script
+# =================
+#
+# Pull pytorch/pytorch:1.10.0-cuda11.3-cudnn8-runtime Image from Docker-Hub
+FROM pytorch/pytorch@sha256:cf9197f9321ac3f49276633b4e78c79aa55f22578de3b650b3158ce6e3481f61
+# Install Necessary Packages
+RUN apt-get update
+RUN pip3 install --pre torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/nightly/cu113
+RUN pip3 uninstall -y torchvision
+RUN pip3 install --pre torchvision --extra-index-url https://download.pytorch.org/whl/nightly/cu113
+RUN pip3 install grpcio
+RUN pip3 install grpcio-tools
+# Copy Resources to Respective Directories
+RUN mkdir /resources
+WORKDIR /resources
+COPY ./Resources/OHE.labels ./OHE.labels
+COPY ./Resources/convnext.model ./convnext.model
+RUN mkdir -p /root/.cache/torch/hub/checkpoints/
+COPY ./Resources/convnext_tiny-983f1562.pth /root/.cache/torch/hub/checkpoints/convnext_tiny-983f1562.pth
+# Copy Server Files for Execution
+WORKDIR /workspace
+COPY ./Server/communication_pb2_grpc.py ./communication_pb2_grpc.py
+COPY ./Server/communication_pb2.py ./communication_pb2.py
+COPY ./Server/inference_server.py ./inference_server.py
+# Copy Model File
+COPY ./model.py ./model.py
+# Set Permissions & Create Execution Entrypoint
+RUN chmod 777 ./inference_server.py
+ENTRYPOINT [ "./inference_server.py" ]

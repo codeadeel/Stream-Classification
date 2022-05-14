@@ -1,0 +1,63 @@
+# syntax=docker/dockerfile:1
+#
+# =========================================================
+# | STREAM CLASSIFICATION VIDEO INFERENCE CLIENT FOR RTSP |
+# =========================================================
+# 
+# This Dockerfile is used to build rtsp based video inference client for Stream Classification & Brand Recogntion.
+# 
+# Quick Command to Build video Inference Client For RTSP
+# ======================================================
+# docker build -t stream_classification:video_client_rtsp -f Video_Client_RTSP .
+#
+# Quick Command to Run Video Inference Client For RTSP
+# ====================================================
+# docker run --rm -it \
+#     -v [ Required: Your Path to Video File]:/video.mp4 \
+#     -v [ Optional: Your Directory Path to Save Output ]:/Output \
+#     -p [ Optional: Your Port to Expose ]:80 \
+#     stream_classification:video_client_rtsp [ Your Arguments ]
+#
+# Main Build Script
+# =================
+#
+# Pull ubuntu Image from DockerHub
+FROM ubuntu@sha256:b5a61709a9a44284d88fb12e5c48db0409cfad5b69d4ff8224077c57302df9cf
+# Install Necessary Packages
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update
+RUN apt-get install -y libgl1-mesa-dev
+RUN apt-get install -y libglib2.0-0
+RUN apt-get install -y libgtk2.0-dev
+RUN apt-get install -y libgstreamer1.0-0 
+RUN apt-get install -y gstreamer1.0-plugins-base
+RUN apt-get install -y gstreamer1.0-plugins-good
+RUN apt-get install -y gstreamer1.0-plugins-bad
+RUN apt-get install -y gstreamer1.0-plugins-ugly
+RUN apt-get install -y gstreamer1.0-libav
+RUN apt-get install -y gstreamer1.0-doc
+RUN apt-get install -y gstreamer1.0-tools
+RUN apt-get install -y gstreamer1.0-x
+RUN apt-get install -y gstreamer1.0-alsa
+RUN apt-get install -y gstreamer1.0-gl
+RUN apt-get install -y libglib2.0-dev
+RUN apt-get install -y libgstrtspserver-1.0-dev
+RUN apt-get install -y gstreamer1.0-rtsp
+RUN apt-get install -y python3
+RUN apt-get install -y python3-pip
+RUN pip3 install pillow
+RUN pip3 install grpcio
+RUN pip3 install grpcio-tools
+RUN pip3 install opencv-python
+RUN pip3 install opencv-contrib-python
+# Copy Resources to Respective Directories
+RUN mkdir /Output
+WORKDIR /home
+# Copy RTSP based Video Inference Client Files for Execution
+COPY ./Server/communication_pb2_grpc.py ./communication_pb2_grpc.py
+COPY ./Server/communication_pb2.py ./communication_pb2.py
+COPY ./Server/inference_client.py ./inference_client.py
+COPY ./Clients/video_client_rtsp.py ./video_client_rtsp.py
+# Set Permissions & Create Execution Entrypoint
+RUN chmod 777 ./video_client_rtsp.py
+ENTRYPOINT [ "./video_client_rtsp.py" ]

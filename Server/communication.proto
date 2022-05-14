@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+service sc_service{
+    rpc inference(server_input) returns (server_output) {}
+}
+
+message server_input{
+    bytes imgs = 1;
+    int32 batch = 2;
+    int32 width = 3;
+    int32 height = 4;
+    int32 channel = 5;
+    string data_type = 6;
+    string client_id = 7;
+}
+
+message server_output{
+    bytes stream_classification = 1;
+    bytes probabilities = 2;
+    string data_type = 3;
+}

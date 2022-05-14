@@ -1,0 +1,45 @@
+# syntax=docker/dockerfile:1
+#
+# =======================================
+# | STREAM CLASSIFICATION MODEL TRAINER |
+# =======================================
+# 
+# This Dockerfile is used to build model trainer for Stream Classification.
+# 
+# Quick Command to Build Trainer
+# ==============================
+# docker build -t stream_classification:trainer -f Build_Trainer .
+#
+# Quick Command to Run Trainer
+# ============================
+# docker run --rm -it --gpus all \
+#     -v [ Required: Your Path to Data Directory ]:/data \
+#     -v [ Required / Optional: Your Directory Path to Save Output Files ]:/resources \
+#     stream_classification:trainer [ Your Arguments ]
+#
+# Main Build Script
+# =================
+#
+# Pull pytorch/pytorch:1.10.0-cuda11.3-cudnn8-runtime Image from Docker-Hub
+FROM pytorch/pytorch@sha256:cf9197f9321ac3f49276633b4e78c79aa55f22578de3b650b3158ce6e3481f61
+# Install Necessary Packages
+RUN apt-get update
+RUN pip3 install --pre torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/nightly/cu113
+RUN pip3 uninstall -y torchvision
+RUN pip3 install --pre torchvision --extra-index-url https://download.pytorch.org/whl/nightly/cu113
+RUN pip3 install matplotlib
+RUN pip3 install pandas
+RUN pip3 install seaborn
+RUN pip3 install scikit-learn
+# Copy Resources to Respective Directories
+RUN mkdir /resources /data
+RUN mkdir -p /root/.cache/torch/hub/checkpoints/
+COPY ./Resources/convnext_tiny-983f1562.pth /root/.cache/torch/hub/checkpoints/convnext_tiny-983f1562.pth
+WORKDIR /workspace
+# Copy Trainer Files for Execution
+COPY ./Trainer/trainer.py ./trainer.py
+# Copy Model File
+COPY ./model.py ./model.py
+# Set Permissions & Create Execution Entrypoint
+RUN chmod 777 ./trainer.py
+ENTRYPOINT [ "./trainer.py" ]
