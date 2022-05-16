@@ -22,7 +22,7 @@ def main_infer():
     for i in json_data.values():
         pil_img_list.append(Image.open(i).resize((224, 224)))
     res = scbr_server(pil_img_list)
-    for i, j, k in zip(list(json_data.keys()), res[0], res[1]):
+    for i, j, k in zip(list(json_data.keys()), res[0], res[1].tolist()):
         out_dict[i] = {'stream': j, 'probabilities': k}
 
     return out_dict
