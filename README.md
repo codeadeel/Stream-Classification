@@ -70,8 +70,8 @@ git clone https://github.com/codeadeel/Stream-Classification.git
 
 # To download trained resources
 cd ./Stream-Classification
-chmod 777 ./get_resources.sh
-./get_resources.sh
+chmod 777 ./get_resources.py
+./get_resources.py
 ```
 
 ## <a name="container_build">Container Build
