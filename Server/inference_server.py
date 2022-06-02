@@ -181,8 +181,8 @@ class sc_service(communication_pb2_grpc.sc_serviceServicer):
 
         Method Input
         =============
-        inf_out : Stream Classification & Brand Recognition inference as tuple
-                            ( Stream Classification Inference List, Brand Recognition Inference List )
+        inf_out : Stream Classification inference as tuple
+                            ( Stream Classification Inference List, Stream Classificiation Probability List )
 
         Method Output
         ==============

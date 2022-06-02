@@ -81,7 +81,7 @@ class sc_client:
 
         Method Output
         ==============
-        Stream Classification & Brand Recognition inference as tuple
+        Stream Classification inference as tuple
                              ( Stream Classification Inference List, Stream Classificiation Probability List )
         """
         x = np.stack([np.asarray(i) for i in x])
