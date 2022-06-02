@@ -4,7 +4,7 @@
 # | STREAM CLASSIFICATION VIDEO INFERENCE CLIENT FOR BROWSER |
 # ============================================================
 # 
-# This Dockerfile is used to build browser based video inference client for Stream Classification & Brand Recogntion.
+# This Dockerfile is used to build browser based video inference client for Stream Classification.
 # 
 # Quick Command to Build video Inference Client For Browser
 # =========================================================

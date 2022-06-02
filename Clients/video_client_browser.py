@@ -48,7 +48,7 @@ class Video:
         self.width = int(self.__vid_obj__.get(ocv.CAP_PROP_FRAME_WIDTH))
         self.__total_frames__ = int(self.__vid_obj__.get(ocv.CAP_PROP_FRAME_COUNT))
         self.stream_inference = sc_client(self.sc_server_ip)
-        self.csv_str = 'Frame #,Stream Classification,Brand Recognition\n'
+        self.csv_str = 'Frame #,Stream Classification\n'
     
     def __str__(self):
         """
