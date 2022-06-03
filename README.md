@@ -3,6 +3,7 @@
 * [**Introduction**](#introduction)
 * [**Architecture**](#architecture)
 * [**Repository Cloning**](#cloner)
+* [**Results**](#convres)
 * [**Container Build**](#container_build)
   * [**Single File Processor**](#single_processor)
   * [**Annotation Based File Processor**](#annotation_processor)
@@ -73,6 +74,30 @@ cd ./Stream-Classification
 chmod 777 ./get_resources.py
 ./get_resources.py
 ```
+
+## <a name="convres">Results
+
+The finetuning for the model is done on Pakistani news channel dataset. Finetuning results are given below:
+
+***Training Epochs:*** 3  
+***Learning Rate:*** 0.0001  
+***Batch Size:*** 64  
+
+***Average Training Loss:*** 0.362  
+***Average Training Accuracy:*** 0.857  
+***Average Validation Loss:*** 0.156  
+***Average Validation Accuracy:*** 0.944  
+***Testing Loss:*** 0.0306  
+***Testing Accuracy:*** 0.953  
+
+***Precision:*** 0.962  
+***Recall:*** 0.952  
+***F1 Score:*** 0.957  
+***Jaccard Score:*** 0.9182  
+
+Confusion Matrix after finetuning was computed as below:
+
+![Confusion Matrix][convnext_confusion]
 
 ## <a name="container_build">Container Build
 
@@ -298,6 +323,7 @@ docker run --rm -it stream_classification:db_dump
 
 [macro_architecture]: ./MarkDown-Data/macro_architecture.jpg
 [micro_architecture]: ./MarkDown-Data/micro_architecture.jpg
+[convnext_confusion]: ./MarkDown-Data/convnext_model_Confusion_Matrix.png
 [annotation_discussion]: ./Trainer/README.md
 [gdown_link]: https://github.com/wkentaro/gdown
 [scbr_file]: ./Clients/SCBR.py
