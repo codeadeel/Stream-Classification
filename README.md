@@ -17,6 +17,7 @@
   * [**Client: *Local Stream Local Display***](#local_stream_local)
   * [**Client: *Local Stream Browser***](#local_stream_browser)
   * [**Client: *Local Stream RTSP***](#local_stream_rtsp)
+  * [**Client: *Database Inference Data Dump***](#db_dump)
   
 ## <a name="introduction">Introduction
 
@@ -306,9 +307,23 @@ docker run --rm -it \
     stream_classification:video_client_rtsp [ Your Arguments ]
 ```
 
+### <a name="db_dump">Client: ***Database Inference Data Dump***
+
+This client can be used to dump results from inference, into database. To build this client, first we need to change ```scbr_server_ip``` in [SCBR.py][scbr_file], to a relevant server ip. Then to build the container, following command can be used:
+
+```bash
+docker build -t stream_classification:db_dump -f DB_Dump .
+```
+
+Also, to execute container, following command can be used:
+
+```bash
+docker run --rm -it stream_classification:db_dump
+```
 
 [macro_architecture]: ./MarkDown-Data/macro_architecture.jpg
 [micro_architecture]: ./MarkDown-Data/micro_architecture.jpg
 [convnext_confusion]: ./MarkDown-Data/convnext_model_Confusion_Matrix.png
 [annotation_discussion]: ./Trainer/README.md
 [gdown_link]: https://github.com/wkentaro/gdown
+[scbr_file]: ./Clients/SCBR.py

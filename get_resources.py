@@ -30,4 +30,3 @@ download_addr = '/'.join(__file__.split('/')[:-1]) + '/Resources'
 
 for keys, vals in dlinks.items():
     gdown.download(vals, f'{download_addr}/{keys}', quiet=False, fuzzy=True)
-    
