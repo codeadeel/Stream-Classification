@@ -1,4 +1,5 @@
 # Stream Classification
+![DockerHub CI][dockerBadge]
 
 ![Stream Classification Macro Architecture][macro_architecture]
 
@@ -12,4 +13,5 @@ The model used in this architecture is ***ConvNext-Tiny***, finetuned using ***P
 
 ##### For extensive documentation, please check [***wiki***](https://github.com/codeadeel/Stream-Classification/wiki).
 
+[dockerBadge]: https://github.com/codeadeel/Stream-Classification/actions/workflows/dockerPush.yml/badge.svg?event=push
 [macro_architecture]: ./MarkDown-Data/macro_architecture.jpg
