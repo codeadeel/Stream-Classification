@@ -1,0 +1,83 @@
+name: DockerHub Image Push
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: main Branch Checkout
+      uses: actions/checkout@v3
+    - name: Install gdown
+      run: pip3 install gdown
+    - name: Download Resources
+      run: python3 ./get_resources.py
+    - name: Docker Login
+      run: docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}}
+      
+    - name: Build Trainer
+      run: docker build -t ${{secrets.DOCKER_USER}}/stream_classification:trainer -f Build_Trainer .
+    - name: Push Trainer
+      run: docker push ${{secrets.DOCKER_USER}}/stream_classification:trainer
+      
+    - name: Build Server
+      run: docker build -t ${{secrets.DOCKER_USER}}/stream_classification:server -f Build_Server .
+    - name: Push Server
+      run: docker push ${{secrets.DOCKER_USER}}/stream_classification:server
+      
+    - name: Build Single Processor
+      run: docker build -t ${{secrets.DOCKER_USER}}/stream_classification:single_processor -f Single_Processor .
+    - name: Push Single Processor
+      run: docker push ${{secrets.DOCKER_USER}}/stream_classification:single_processor
+      
+    - name: Build Processor
+      run: docker build -t ${{secrets.DOCKER_USER}}/stream_classification:processor -f Processor .
+    - name: Push Processor
+      run: docker push ${{secrets.DOCKER_USER}}/stream_classification:processor
+    
+    - name: Build Live Client
+      run: docker build -t ${{secrets.DOCKER_USER}}/stream_classification:live_client -f Live_Client .
+    - name: Push Live Client
+      run: docker push ${{secrets.DOCKER_USER}}/stream_classification:live_client
+      
+    - name: Build Browser Based Live Client
+      run: docker build -t ${{secrets.DOCKER_USER}}/stream_classification:live_client_browser -f Live_Client_Browser .
+    - name: Push Browser Based Live Client
+      run: docker push ${{secrets.DOCKER_USER}}/stream_classification:live_client_browser
+      
+    - name: Build RTSP Based Live Client
+      run: docker build -t ${{secrets.DOCKER_USER}}/stream_classification:live_client_rtsp -f Live_Client_RTSP .
+    - name: Push RTSP Based Live Client
+      run: docker push ${{secrets.DOCKER_USER}}/stream_classification:live_client_rtsp
+     
+    - name: Build Browser Based Multi Live Client
+      run: docker build -t ${{secrets.DOCKER_USER}}/stream_classification:multi_live_browser -f Multi_Live_Client_Browser .
+    - name: Push Browser Based Multi Live Client
+      run: docker push ${{secrets.DOCKER_USER}}/stream_classification:multi_live_browser
+      
+    - name: Build RTSP Based Multi Live Client
+      run: docker build -t ${{secrets.DOCKER_USER}}/stream_classification:multi_live_rtsp -f Multi_Live_Client_RTSP .
+    - name: Push RTSP Based Multi Live Client
+      run: docker push ${{secrets.DOCKER_USER}}/stream_classification:multi_live_rtsp
+    
+    - name: Build Video Client
+      run: docker build -t ${{secrets.DOCKER_USER}}/stream_classification:video_client -f Video_Client .
+    - name: Push Video Client
+      run: docker push ${{secrets.DOCKER_USER}}/stream_classification:video_client
+      
+    - name: Build Browser Based Video Client
+      run: docker build -t ${{secrets.DOCKER_USER}}/stream_classification:video_client_browser -f Video_Client_Browser .
+    - name: Push Browser Based Video Client
+      run: docker push ${{secrets.DOCKER_USER}}/stream_classification:video_client_browser
+      
+    - name: Build RTSP Based Video Client
+      run: docker build -t ${{secrets.DOCKER_USER}}/stream_classification:video_client_rtsp -f Video_Client_RTSP .
+    - name: Push RTSP Based Video Client
+      run: docker push ${{secrets.DOCKER_USER}}/stream_classification:video_client_rtsp
