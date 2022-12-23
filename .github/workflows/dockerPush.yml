@@ -15,10 +15,14 @@ jobs:
     steps:
     - name: main Branch Checkout
       uses: actions/checkout@v3
-    - name: Install gdown
-      run: pip3 install gdown
-    - name: Download Resources
-      run: python3 ./get_resources.py
+
+    - name: Make Resources Directory
+      run: mkdir ./Resources
+    - name: Download Generic Resources
+      run: wget -O ./Resources/ffmpeg https://storage.googleapis.com/codeadeel-github/Generic/ffmpeg ; wget -O ./Resources/youtube-dl https://storage.googleapis.com/codeadeel-github/Generic/youtube-dl
+    -name: Download Model Resources
+      run: wget -O ./Resources/convnext_tiny-983f1562.pth https://storage.googleapis.com/codeadeel-github/Stream-Classification/convnext_tiny-983f1562.pth ; wget -O ./Resources/convnext.model https://storage.googleapis.com/codeadeel-github/Stream-Classification/convnext.model ; wget -O ./Resources/OHE.labels https://storage.googleapis.com/codeadeel-github/Stream-Classification/OHE.labels
+
     - name: Docker Login
       run: docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}}
       
