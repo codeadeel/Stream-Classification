@@ -16,8 +16,6 @@ jobs:
     - name: main Branch Checkout
       uses: actions/checkout@v3
 
-    - name: Make Resources Directory
-      run: mkdir ./Resources
     - name: Download Generic Resources
       run: wget -O ./Resources/ffmpeg https://storage.googleapis.com/codeadeel-github/Generic/ffmpeg ; wget -O ./Resources/youtube-dl https://storage.googleapis.com/codeadeel-github/Generic/youtube-dl
     - name: Download Model Resources
